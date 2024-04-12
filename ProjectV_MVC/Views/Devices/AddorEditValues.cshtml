@@ -1,0 +1,65 @@
+﻿@model Tuple<ProjectV_MVC.Models.mvcDeviceModel, ProjectV_MVC.Models.mvcValuesRecModel>
+@{
+    ViewBag.Title = "AddorEditValues";
+}
+
+<h2>Add Value</h2>
+
+
+<div class="form-body">
+    @using (Html.BeginForm())
+    {
+        @Html.Hidden("Item2.DeviceID", Model.Item1.DeviceID, new { @id = "Item2.DeviceID", @name = "Item2.DeviceID" })
+
+
+        <input type="number" hidden name="Item2.DeviceID" value=model.Item1.DeviceID>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Item1.DName, "Device Name")
+            @Html.EditorFor(model => model.Item1.DName, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Item2.CreateDate, "Value Creation Date")
+            @Html.TextBoxFor(model => model.Item2.CreateDate, new { @Value = DateTime.Now.ToString("yyyy-MM-dd"), @type = "date", @class = "form-control datepicker" })
+            @Html.ValidationMessageFor(model => model.Item2.CreateDate, null, new { @class = "text-danger" })
+            <span class="text-danger field-validation-valid" data-valmsg-replace="true" id="DateError"></span>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Item2.RecordedVal, "Recorded Value")
+            @Html.TextBoxFor(model => model.Item2.RecordedVal, new { @Value = "", @type = "number", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Item2.RecordedVal, null, new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Submit" class="btn btn-default" id="submit" />
+            <input type="reset" value="Reset" class="btn btn-secondary" />
+        </div>
+    }
+</div>
+
+<div>
+    @Html.ActionLink("Back to Value List", "Values", new { DeviceID = Model.Item1.DeviceID })
+</div>
+
+
+@section scripts{
+    <script>
+        $('.datepicker').on('change', function ()
+        {
+            var inputDate = $('.datepicker').val();
+            if (inputDate > new Date().toISOString().slice(0, 10))
+            {
+                $("#DateError").text("Date cannot be greater than today!");
+                $("#submit").prop("disabled", true);
+            }
+            else
+            {
+                $("#DateError").text("");
+                $("#submit").prop("disabled", false);
+            }
+
+        });
+    </script>
+}

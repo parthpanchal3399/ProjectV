@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ProjectVModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Devices">
+          <Key>
+            <PropertyRef Name="DeviceID" />
+            <PropertyRef Name="Username" />
+          </Key>
+          <Property Name="DeviceID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateDate" Type="date" Nullable="false" />
+          <Property Name="AssignedProj" Type="smallint" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Projects">
+          <Key>
+            <PropertyRef Name="ProjectID" />
+            <PropertyRef Name="Username" />
+          </Key>
+          <Property Name="ProjectID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateDate" Type="date" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Username" />
+          </Key>
+          <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ValueRec">
+          <Key>
+            <PropertyRef Name="ValueID" />
+            <PropertyRef Name="Username" />
+          </Key>
+          <Property Name="ValueID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DeviceID" Type="smallint" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="RecordedVal" Type="int" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Devices__2A4B4B5E">
+          <End Role="Projects" Type="Self.Projects" Multiplicity="1" />
+          <End Role="Devices" Type="Self.Devices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Projects">
+              <PropertyRef Name="ProjectID" />
+              <PropertyRef Name="Username" />
+            </Principal>
+            <Dependent Role="Devices">
+              <PropertyRef Name="AssignedProj" />
+              <PropertyRef Name="Username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ValueRec__2B3F6F97">
+          <End Role="Devices" Type="Self.Devices" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ValueRec" Type="Self.ValueRec" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Devices">
+              <PropertyRef Name="DeviceID" />
+              <PropertyRef Name="Username" />
+            </Principal>
+            <Dependent Role="ValueRec">
+              <PropertyRef Name="DeviceID" />
+              <PropertyRef Name="Username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ProjectVModelStoreContainer">
+          <EntitySet Name="Devices" EntityType="Self.Devices" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Projects" EntityType="Self.Projects" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ValueRec" EntityType="Self.ValueRec" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Devices__2A4B4B5E" Association="Self.FK__Devices__2A4B4B5E">
+            <End Role="Projects" EntitySet="Projects" />
+            <End Role="Devices" EntitySet="Devices" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ValueRec__2B3F6F97" Association="Self.FK__ValueRec__2B3F6F97">
+            <End Role="Devices" EntitySet="Devices" />
+            <End Role="ValueRec" EntitySet="ValueRec" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ProjectVModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ProjectVEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Devices" EntityType="ProjectVModel.Device" />
+          <EntitySet Name="Projects" EntityType="ProjectVModel.Project" />
+          <EntitySet Name="Users" EntityType="ProjectVModel.User" />
+          <EntitySet Name="ValueRecs" EntityType="ProjectVModel.ValueRec" />
+          <AssociationSet Name="FK__Devices__2A4B4B5E" Association="ProjectVModel.FK__Devices__2A4B4B5E">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Device" EntitySet="Devices" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ValueRec__2B3F6F97" Association="ProjectVModel.FK__ValueRec__2B3F6F97">
+            <End Role="Device" EntitySet="Devices" />
+            <End Role="ValueRec" EntitySet="ValueRecs" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Device">
+          <Key>
+            <PropertyRef Name="DeviceID" />
+            <PropertyRef Name="Username" />
+          </Key>
+          <Property Name="DeviceID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="AssignedProj" Type="Int16" Nullable="false" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Project" Relationship="ProjectVModel.FK__Devices__2A4B4B5E" FromRole="Device" ToRole="Project" />
+          <NavigationProperty Name="ValueRecs" Relationship="ProjectVModel.FK__ValueRec__2B3F6F97" FromRole="Device" ToRole="ValueRec" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="ProjectID" />
+            <PropertyRef Name="Username" />
+          </Key>
+          <Property Name="ProjectID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Devices" Relationship="ProjectVModel.FK__Devices__2A4B4B5E" FromRole="Project" ToRole="Device" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Username" />
+          </Key>
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ValueRec">
+          <Key>
+            <PropertyRef Name="ValueID" />
+            <PropertyRef Name="Username" />
+          </Key>
+          <Property Name="ValueID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DeviceID" Type="Int16" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="RecordedVal" Type="Int32" Nullable="false" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Device" Relationship="ProjectVModel.FK__ValueRec__2B3F6F97" FromRole="ValueRec" ToRole="Device" />
+        </EntityType>
+        <Association Name="FK__Devices__2A4B4B5E">
+          <End Type="ProjectVModel.Project" Role="Project" Multiplicity="1" />
+          <End Type="ProjectVModel.Device" Role="Device" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectID" />
+              <PropertyRef Name="Username" />
+            </Principal>
+            <Dependent Role="Device">
+              <PropertyRef Name="AssignedProj" />
+              <PropertyRef Name="Username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ValueRec__2B3F6F97">
+          <End Type="ProjectVModel.Device" Role="Device" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="ProjectVModel.ValueRec" Role="ValueRec" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Device">
+              <PropertyRef Name="DeviceID" />
+              <PropertyRef Name="Username" />
+            </Principal>
+            <Dependent Role="ValueRec">
+              <PropertyRef Name="DeviceID" />
+              <PropertyRef Name="Username" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ProjectVModelStoreContainer" CdmEntityContainer="ProjectVEntities">
+          <EntitySetMapping Name="Devices">
+            <EntityTypeMapping TypeName="ProjectVModel.Device">
+              <MappingFragment StoreEntitySet="Devices">
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="AssignedProj" ColumnName="AssignedProj" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="DName" ColumnName="DName" />
+                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Projects">
+            <EntityTypeMapping TypeName="ProjectVModel.Project">
+              <MappingFragment StoreEntitySet="Projects">
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="PName" ColumnName="PName" />
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="ProjectVModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ValueRecs">
+            <EntityTypeMapping TypeName="ProjectVModel.ValueRec">
+              <MappingFragment StoreEntitySet="ValueRec">
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="RecordedVal" ColumnName="RecordedVal" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
+                <ScalarProperty Name="ValueID" ColumnName="ValueID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

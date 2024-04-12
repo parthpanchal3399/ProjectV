@@ -1,0 +1,162 @@
+﻿@model ProjectV_MVC.Models.mvcDeviceModel
+
+@{
+    ViewBag.Title = "Values";
+}
+
+
+<h2>Values for @Model.DName</h2>
+
+
+<p>
+    <a href="@Url.Action("AddorEditValues", "Devices", new { DeviceID = Model.DeviceID })" class="btn btn-default">
+        <i class="fa fa-plus" aria-hidden="true"></i> Create New
+    </a>
+</p>
+
+<table class="table table-striped" align="center">
+    <thead class="table-heading">
+        <tr>
+            <th>
+                Creation Date
+            </th>
+            <th>
+                Recorded Value
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+
+    @foreach (var item in Model.ValueRecs.OrderBy(x => x.CreateDate))
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreateDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecordedVal)
+            </td>
+            <td>
+                <a onclick="Delete(@item.ValueID)" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+<div>
+    @Html.ActionLink("Back to Device List", "Index")
+</div>
+
+
+<div>
+    <canvas id="myChart"></canvas>
+</div>
+
+
+@section scripts{
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.1/chart.umd.js"></script>
+
+    <script>
+        function Delete(id)
+        {
+            console.log(id);
+            alertify.confirm("DELETE?", "Are you sure you want to delete this Value?", function ()
+            {
+                window.location.href = '@Url.Action("DeleteValue", "Devices")?ValueID='+id;
+            }, null)
+        }
+    </script>
+
+    <script>
+        const ctx = document.getElementById('myChart');
+
+        $.ajax({
+            type: "POST",
+            url: "GetValuesForChart",
+            data: "{DeviceID:" + @Model.DeviceID + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (chData)
+            {
+                if (chData[0].length != 0 && chData[1].length != 0)
+                {
+                    var _data = chData;
+                    var _chartLabels = _data[0].map(function (x)
+                    {
+                        var fulldate = new Date(parseInt(x.substr(6)));
+                        var formatted = fulldate.getDate() + "-" + (fulldate.getMonth() + 1) % 12 + "-" + fulldate.getFullYear()
+                        return formatted;
+                    })
+                    var _chartData = _data[1];
+                    var bgColor = ["#d6800f"];
+
+                    new Chart(ctx,
+                        {
+                            type: "line",
+                            data: {
+                                labels: _chartLabels,
+                                datasets: [{
+                                    backgroundColor: bgColor,
+                                    data: _chartData, 
+                                    borderColor: '#4a3d2d'
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    x: {
+                                        title: {
+                                            color: 'black',
+                                            display: true,
+                                            text: 'Recorded Date',
+                                            font: {
+                                                size: 20
+                                            }
+                                        }
+                                    },
+                                    y: {
+                                        title: {
+                                            color: 'black',
+                                            display: true,
+                                            text: 'Value',
+                                            font: {
+                                                size: 20
+                                            }
+                                        }
+                                    }
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    }
+                                },
+                                elements: {
+                                    point: {
+                                        radius: 5
+                                    },
+                                    line: {
+                                        borderWidth: 1
+                                    }
+                                }
+                            }
+                        });
+                }
+            },
+            error: OnError
+        })
+
+
+        function OnError(err)
+        {
+            alert("error: " + err);
+        }
+
+    </script>
+
+
+}
+

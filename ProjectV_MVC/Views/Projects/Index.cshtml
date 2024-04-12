@@ -1,0 +1,60 @@
+﻿@model IEnumerable<ProjectV_MVC.Models.mvcProjectsModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>List of Projects</h2>
+
+<p>
+    <a href="@Url.Action("AddorEditProjects", "Projects")" class="btn btn-default"><i class="fa fa-plus" aria-hidden="true"></i> Create New
+    </a>
+</p>
+<table class="table table-striped" align="center">
+    <thead class="table-heading">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreateDate)
+            </th>
+            <th>
+                # of Devices
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+@foreach (var item in Model.OrderBy(x => x.CreateDate)) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.PName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CreateDate)
+    </td>
+    <td>
+        <a href="@Url.Action("Index", "Devices")">@Html.DisplayFor(modelItem => item.Devices.Count)</a>
+    </td>
+    <td>
+        <a href="@Url.Action("AddorEditProjects", "Projects", new { ProjectID = item.ProjectID })" class="btn btn-default"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
+        <a onclick="Delete(@item.ProjectID)" class="btn btn-danger"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</a>
+    </td>
+</tr>
+}
+
+</table>
+
+@section scripts{
+    <script>
+        function Delete(id)
+        {
+            console.log(id);
+            alertify.confirm("DELETE?", "Are you sure you want to delete this Project?", function ()
+            {
+                window.location.href = '@Url.Action("DeleteProject", "Projects")?ProjectID='+id;
+            }, null)
+        }
+    </script>
+}

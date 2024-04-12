@@ -1,0 +1,79 @@
+﻿@model ProjectV_MVC.Models.mvcDeviceModel
+
+@{
+    ViewBag.Title = "AddorEditDevices";
+}
+
+<h2>Create / Edit Device</h2>
+
+
+<div class="form-body">
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(model => model.DeviceID)
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DName, "Device Name")
+            @Html.EditorFor(model => model.DName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.DName, null, new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CreateDate, "Device Creation Date")
+            @Html.TextBoxFor(model => model.CreateDate, new { @Value = DateTime.Now.ToString("yyyy-MM-dd"), @type = "date", @class = "form-control datepicker" })
+            @Html.ValidationMessageFor(model => model.CreateDate, null, new { @class = "text-danger" })
+            <span class="text-danger field-validation-valid" data-valmsg-replace="true" id="DateError"></span>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AssignedProj, "Assign to Project")
+            @Html.DropDownListFor(model => model.AssignedProj, new SelectList(ViewBag.Projects, "ProjectID", "PName"), "Select Project", new { @class = "dropdown form-control"})
+            @Html.ValidationMessageFor(model => model.AssignedProj, null, new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Submit" class="btn btn-default" id="submit"/>
+            <input type="reset" value="Reset" class="btn btn-secondary" />
+        </div>
+
+    }
+</div>
+
+<div>
+    @Html.ActionLink("Back to Device List", "Index")
+</div>
+
+
+@section scripts{
+    <script>
+        $(window).on("load", function ()
+        {
+            if (document.getElementById("DeviceID").value == '0')
+            {
+                document.getElementById("CreateDate").value = new Date().toISOString().slice(0, 10);
+            }
+            else
+            {
+                document.getElementById("CreateDate").value = new Date('@Model.CreateDate.ToString("yyyy-MM-dd")').toISOString().slice(0, 10);
+            }
+        });
+
+        $('.datepicker').on('change', function ()
+        {
+            var inputDate = $('.datepicker').val();
+            if (inputDate > new Date().toISOString().slice(0, 10))
+            {
+                $("#DateError").text("Date cannot be greater than today!");
+                $("#submit").prop("disabled", true);
+            }
+            else
+            {
+                $("#DateError").text("");
+                $("#submit").prop("disabled", false);
+            }
+
+        });
+
+    </script>
+}
