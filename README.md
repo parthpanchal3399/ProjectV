@@ -1,5 +1,13 @@
 # A simple CRUD WebApp using ASP.NET MVC, ASP.NET WebAPI, and SQL Server
 
+## Task Checklist
+- [x] CRUD Operations for Projects (Both WebAPI and MVC)
+- [x] CRUD Operations for Devices (Both WebAPI and MVC)
+- [x] Device Assignment to Projects
+- [ ] Project and Device Overview Window/Dashboard (No dashboard but list view implemented)
+- [x] Authentication System
+- [x] Chart Visualization for Devices
+
 
 ## Tech Stack
 - C# - .NET Framework 4.7.2 [ASP.Net MVC, WebAPI, Razor, Entity Framework 6)
