@@ -8,6 +8,7 @@
 - [x] Authentication System
 - [x] Chart Visualization for Devices
 
+Demo: https://www.youtube.com/watch?v=R2gYYM6EMDM
 
 ## Tech Stack
 - C# - .NET Framework 4.7.2 [ASP.Net MVC, WebAPI, Razor, Entity Framework 6)
